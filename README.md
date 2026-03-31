@@ -8,6 +8,7 @@ This is an unknown application written in Java
 
 ### Flowchart of the main workflow
 
+```mermaid
 flowchart TD
     START(Start) --> LOGIN
 
@@ -68,5 +69,6 @@ flowchart TD
     class ALOGIN,AMENU,A1,A2,A3,A4,A5,A6,SAVE_A coral
     class LOGIN,SAVE_EXIT amber
     class START,END gray
+```
 
 ### Prompts
