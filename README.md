@@ -89,3 +89,5 @@ flowchart TD
 ```
 
 ### Prompts
+
+create an equivalent Python version of the program for the loginMenu, studentLogin, and createStudentProfile, adminLogin studentMenu, adminMenu sections. Put the Python program in a new folder called “python.” 
