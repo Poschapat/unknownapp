@@ -9,9 +9,9 @@ This is an unknown application written in Java
 ### Flowchart of the main workflow
 
 flowchart TD
-    START([เริ่มต้น]) --> LOGIN
+    START(Start) --> LOGIN
 
-    LOGIN[/"Login Menu\n1-Student  2-Admin  3-Exit"/]
+    LOGIN[Login Menu]
 
     LOGIN -->|Student| SLOGIN
     LOGIN -->|Admin| ALOGIN
@@ -20,7 +20,6 @@ flowchart TD
     %% ── Student path ──────────────────────────────
     SLOGIN["Student login\n(Enter ID or 'new')"]
     SLOGIN -->|new| CREATE["Create new profile"]
-    SLOGIN -->|ID not found| LOGIN
     SLOGIN -->|ID found| SMENU
 
     CREATE --> SMENU
@@ -56,7 +55,7 @@ flowchart TD
 
     %% ── Exit ────────────────────────────────────────
     SAVE_EXIT["Save & exit"]
-    SAVE_EXIT --> END([จบ])
+    SAVE_EXIT --> END(End)
 
     %% ── Styles ──────────────────────────────────────
     classDef teal  fill:#1D9E75,stroke:#0F6E56,color:#fff
