@@ -10,65 +10,82 @@ This is an unknown application written in Java
 
 ```mermaid
 flowchart TD
-    START(Start) --> LOGIN
+    START([Start]) --> INIT["Load data / seed default"]
+    INIT --> LOGIN
 
-    LOGIN[Login Menu]
-
-    LOGIN -->|Student| SLOGIN
-    LOGIN -->|Admin| ALOGIN
-    LOGIN -->|Exit| SAVE_EXIT
+    LOGIN[/"Login Menu"/]
+    LOGIN --> D_LOGIN{Choose option?}
+    D_LOGIN -->|Student| SLOGIN["Enter Student ID"]
+    D_LOGIN -->|Admin| ALOGIN["Enter Password"]
+    D_LOGIN -->|Exit| SAVE_EXIT["Save & exit"]
+    SAVE_EXIT --> END([End])
 
     %% ── Student path ──────────────────────────────
-    SLOGIN["Student login\n(Enter ID or 'new')"]
-    SLOGIN -->|new| CREATE["Create new profile"]
-    SLOGIN -->|ID found| SMENU
+    SLOGIN --> D_ID{"ID = 'new'?"}
+    D_ID -->|Yes| CREATE["Create new profile"]
+    D_ID -->|No| D_FOUND{"ID found\nin system?"}
+    D_FOUND -->|Not found| SLOGIN
+    D_FOUND -->|Found| SMENU
 
-    CREATE --> SMENU
+    CREATE --> D_VALID{"Is data\nvalid?"}
+    D_VALID -->|No| SLOGIN
+    D_VALID -->|Yes| SMENU
 
     SMENU[/"Student Menu"/]
-    SMENU --> S1["View course catalog"]
-    SMENU --> S2["Register for course"]
-    SMENU --> S3["Drop a course"]
-    SMENU --> S4["View schedule"]
-    SMENU --> S5["Billing summary"]
-    SMENU --> S6["Edit profile"]
-    SMENU -->|Logout & save| SAVE_S["Save data"]
+    SMENU --> D_SMENU{Choose action?}
+    D_SMENU --> S1["View catalog"]
+    D_SMENU --> S2["Register course"]
+    D_SMENU --> S3["Drop course"]
+    D_SMENU --> S4["View schedule"]
+    D_SMENU --> S5["Billing summary"]
+    D_SMENU --> S6["Edit profile"]
+    D_SMENU -->|Logout| SAVE_S["Save data"]
 
-    S1 & S2 & S3 & S4 & S5 & S6 --> SMENU
+    S2 --> D_ENROLL{"Can enroll?"}
+    D_ENROLL -->|Success| SMENU
+    D_ENROLL -->|Failed| SMENU
+
+    S1 & S3 & S4 & S5 & S6 --> SMENU
     SAVE_S --> LOGIN
 
     %% ── Admin path ─────────────────────────────────
-    ALOGIN["Admin login\n(Enter password)"]
-    ALOGIN -->|Wrong password| LOGIN
-    ALOGIN -->|Correct| AMENU
+    ALOGIN --> D_PWD{"Password\ncorrect?"}
+    D_PWD -->|No| LOGIN
+    D_PWD -->|Yes| AMENU
 
     AMENU[/"Admin Menu"/]
-    AMENU --> A1["View catalog / roster"]
-    AMENU --> A2["View all students"]
-    AMENU --> A3["Add / edit student"]
-    AMENU --> A4["Add / edit course"]
-    AMENU --> A5["View student schedule"]
-    AMENU --> A6["Billing summary"]
-    AMENU -->|Logout & save| SAVE_A["Save data"]
+    AMENU --> D_AMENU{Choose action?}
+    D_AMENU --> A1["View catalog / roster"]
+    D_AMENU --> A2["View all students"]
+    D_AMENU --> A3["Add / edit student"]
+    D_AMENU --> A4["Add / edit course"]
+    D_AMENU --> A5["View student schedule"]
+    D_AMENU --> A6["Billing summary"]
+    D_AMENU -->|Logout| SAVE_A["Save data"]
 
-    A1 & A2 & A3 & A4 & A5 & A6 --> AMENU
+    A3 --> D_STUD{"Duplicate / existing ID?"}
+    D_STUD -->|No duplicate| AMENU
+    D_STUD -->|Duplicate / not found| AMENU
+
+    A4 --> D_COURSE{"Duplicate / existing course code?"}
+    D_COURSE -->|No duplicate| AMENU
+    D_COURSE -->|Duplicate / not found| AMENU
+
+    A1 & A2 & A5 & A6 --> AMENU
     SAVE_A --> LOGIN
 
-    %% ── Exit ────────────────────────────────────────
-    SAVE_EXIT["Save & exit"]
-    SAVE_EXIT --> END(End)
-
     %% ── Styles ──────────────────────────────────────
-    classDef teal  fill:#1D9E75,stroke:#0F6E56,color:#fff
-    classDef coral fill:#D85A30,stroke:#993C1D,color:#fff
-    classDef amber fill:#BA7517,stroke:#854F0B,color:#fff
-    classDef gray  fill:#888780,stroke:#5F5E5A,color:#fff
-    classDef purple fill:#7F77DD,stroke:#534AB7,color:#fff
+    classDef teal   fill:#1D9E75,stroke:#0F6E56,color:#fff
+    classDef coral  fill:#D85A30,stroke:#993C1D,color:#fff
+    classDef amber  fill:#BA7517,stroke:#854F0B,color:#fff
+    classDef gray   fill:#888780,stroke:#5F5E5A,color:#fff
+    classDef decide fill:#7F77DD,stroke:#534AB7,color:#fff
 
     class SLOGIN,CREATE,SMENU,S1,S2,S3,S4,S5,S6,SAVE_S teal
     class ALOGIN,AMENU,A1,A2,A3,A4,A5,A6,SAVE_A coral
-    class LOGIN,SAVE_EXIT amber
+    class LOGIN,INIT,SAVE_EXIT amber
     class START,END gray
+    class D_LOGIN,D_ID,D_FOUND,D_VALID,D_SMENU,D_ENROLL,D_PWD,D_AMENU,D_STUD,D_COURSE decide
 ```
 
 ### Prompts
